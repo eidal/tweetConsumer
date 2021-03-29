@@ -13,6 +13,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import javax.validation.constraints.NotNull;
 import org.springframework.stereotype.Component;
 import twitter4j.HashtagEntity;
 
@@ -23,7 +24,7 @@ public class HashtagMapper {
     return Arrays.stream(hashtagList).map(HashtagEntity::getText).map(Hashtag::new).collect(Collectors.toList());
   }
 
-  public Hashtag mapFromHashtagEntity(HashtagDbEntity hashtagDbEntity) {
+  public Hashtag mapFromHashtagEntity(@NotNull HashtagDbEntity hashtagDbEntity) {
     return Optional.ofNullable(hashtagDbEntity).map(HashtagDbEntity::getName).map(Hashtag::new).orElse(null);
   }
 
@@ -31,7 +32,7 @@ public class HashtagMapper {
     return hashtagDbEntities.stream().map(this::mapFromHashtagEntity).collect(Collectors.toList());
   }
 
-  public HashtagResponse mapToHashtagResponse(Hashtag hashtag) {
+  public HashtagResponse mapToHashtagResponse(@NotNull Hashtag hashtag) {
     return Optional.ofNullable(hashtag).map(Hashtag::getName).map(HashtagResponse::new).orElse(null);
   }
 

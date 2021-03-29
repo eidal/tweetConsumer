@@ -12,6 +12,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import javax.validation.constraints.NotNull;
 import org.springframework.stereotype.Component;
 import twitter4j.Status;
 import twitter4j.User;
@@ -19,7 +20,7 @@ import twitter4j.User;
 @Component
 public class TweetMapper {
 
-  public Tweet mapFromStatusTwitter(Status status) {
+  public Tweet mapFromStatusTwitter(@NotNull Status status) {
     String user = Optional.ofNullable(status).map(Status::getUser).map(User::getId).map(String::valueOf)
             .orElseThrow(() -> new TweetException("Error! The tweet user is null"));
     String text = Optional.ofNullable(status).map(Status::getText)
@@ -29,7 +30,7 @@ public class TweetMapper {
     return new Tweet(user, text, location);
   }
 
-  public TweetDbEntity mapToTweetEntity(Tweet tweet) {
+  public TweetDbEntity mapToTweetEntity(@NotNull Tweet tweet) {
     ObjectMapper mapper = new ObjectMapper();
     String location = Optional.ofNullable(tweet).map(Tweet::getLocation)
             .map(loc -> {
@@ -48,7 +49,7 @@ public class TweetMapper {
     return tweetDbEntity;
   }
 
-  public Tweet mapFromTweetEntity(TweetDbEntity tweetDbEntity) {
+  public Tweet mapFromTweetEntity(@NotNull TweetDbEntity tweetDbEntity) {
     ObjectMapper mapper = new ObjectMapper();
     Location location = Optional.ofNullable(tweetDbEntity.getLocation())
             .map(loc -> {
@@ -68,7 +69,7 @@ public class TweetMapper {
     return tweetEntities.stream().map(this::mapFromTweetEntity).collect(Collectors.toList());
   }
 
-  public TweetResponse mapToTweetRestResponse(Tweet tweet) {
+  public TweetResponse mapToTweetRestResponse(@NotNull Tweet tweet) {
     TweetResponse response = new TweetResponse();
     response.setId(tweet.getId());
     response.setUser(tweet.getUser());
